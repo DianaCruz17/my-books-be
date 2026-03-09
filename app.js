@@ -1,0 +1,40 @@
+import express from 'express';
+import cors from 'cors';
+import db from './db.js';
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+app.get('/api', (request, response) => {
+  const query = 'SELECT * FROM books';
+
+  // Use the .all() method to retrieve all results
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      response.status(400).json({ error: err.message });
+      return;
+    }
+    response.json({
+      message: 'success',
+      data: rows,
+    });
+  });
+});
+
+app.post('/api', (request, response) => {
+  const { title, author, rating } = request.body;
+  const query = 'INSERT INTO books (title,author, rating) VALUES (?,?,?)';
+
+  db.run(query, [title, author, rating], function (err) {
+    if (err) {
+      response.status(500).json({ error: err.message });
+      return;
+    }
+    response.status(201).json({
+      message: 'success',
+    });
+  });
+});
+
+app.listen(3000, () => console.log('serving on port 3000'));
