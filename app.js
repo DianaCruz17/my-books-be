@@ -37,4 +37,19 @@ app.post('/api', (request, response) => {
   });
 });
 
+app.delete('/api/:id', (request, response) => {
+  const removeId = request.params.id;
+  const query = 'DELETE FROM books  where id = (?)';
+
+  db.run(query, [removeId], function (err) {
+    if (err) {
+      response.status(500).json({ error: err.message });
+      return;
+    }
+    response.status(200).json({
+      message: 'success',
+    });
+  });
+});
+
 app.listen(3000, () => console.log('serving on port 3000'));
