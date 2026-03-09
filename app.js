@@ -51,5 +51,21 @@ app.delete('/api/:id', (request, response) => {
     });
   });
 });
+app.put('/api/:id', (request, response) => {
+  const idToModify = request.params.id;
+  const { title, author, rating } = request.body;
+  const query =
+    'UPDATE books SET title = (?), author = (?), rating = (?) WHERE id=(?)';
+
+  db.run(query, [title, author, rating, idToModify], function (err) {
+    if (err) {
+      response.status(500).json({ error: err.message });
+      return;
+    }
+    response.status(200).json({
+      messenge: 'success',
+    });
+  });
+});
 
 app.listen(3000, () => console.log('serving on port 3000'));
