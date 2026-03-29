@@ -69,6 +69,7 @@ app.delete('/api/:id', (request, response) => {
 
 app.put('/api/:id', (request, response) => {
   const idToModify = request.params.id;
+  console.log('REQUEST BODY', request.body);
   const { title, author, rating } = request.body;
   const query =
     'UPDATE books SET title = (?), author = (?), rating = (?) WHERE id=(?)';
